@@ -922,7 +922,7 @@ namespace EventLog1
         }
 
 
-        public List<EventLogSubscription> EventLogCollection = new List<EventLogSubscription>();
+        public List<EventLogSubscription> EventLogCollectionSubscription = new List<EventLogSubscription>();
 
         private void button7_Click(object sender, EventArgs e)
         {
@@ -933,9 +933,9 @@ namespace EventLog1
 
         public void WatcherS()
         {
-            EventLogCollection.Add(new EventLogSubscription("747-ПК", "EventReader", "1", "MaxiGraf"));
+            EventLogCollectionSubscription.Add(new EventLogSubscription("747-ПК", "EventReader", "1", "MaxiGraf"));
 
-            EventLogCollection.Add(new EventLogSubscription("DESKTOP-PMFSLPC", "EventReader", "1", "MaxiGrafTEST1"));
+            EventLogCollectionSubscription.Add(new EventLogSubscription("DESKTOP-PMFSLPC", "EventReader", "1", "MaxiGrafTEST1"));
 
 
             List<EventLogWatcher> watcherS = new List<EventLogWatcher>();
@@ -955,20 +955,20 @@ namespace EventLog1
                     Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");
 
 
-                    for (int i = 0; i < EventLogCollection.Count; i++)
+                    for (int i = 0; i < EventLogCollectionSubscription.Count; i++)
                     {
 
                         EventLogSession S = new EventLogSession(
-                        EventLogCollection[i].domain_name,
-                        EventLogCollection[i].domain_name,
-                        EventLogCollection[i].user_name,
-                        EventLogCollection[i].GetPreparedPassword(),
+                        EventLogCollectionSubscription[i].domain_name,
+                        EventLogCollectionSubscription[i].domain_name,
+                        EventLogCollectionSubscription[i].user_name,
+                        EventLogCollectionSubscription[i].GetPreparedPassword(),
                         SessionAuthentication.Default);
 
 
                         //kod.Dispose();
 
-                        EventLogConfiguration logCon = new EventLogConfiguration(EventLogCollection[i].log_nаme, S);
+                        EventLogConfiguration logCon = new EventLogConfiguration(EventLogCollectionSubscription[i].log_nаme, S);
 
 
 
@@ -1033,8 +1033,7 @@ namespace EventLog1
         }
 
         // <summary>
-        // Callback method that gets executed when an event is
-        // reported to the subscription.
+        // Callback method кода в полписку приходит событие
         // </summary>
         public void HandleEventWatcherS(object obj, EventRecordWrittenEventArgs arg)
         {
