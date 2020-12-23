@@ -394,8 +394,8 @@ namespace EventLog1
                 //}
 
                 string domain = 
-                 //   "747-ПК";
-                "DESKTOP-PMFSLPC";
+                    "747-ПК";
+               // "DESKTOP-PMFSLPC";
                 //"IVS-PC";
 
                 string username =
@@ -407,7 +407,7 @@ namespace EventLog1
                 //"AD";
                 "EventReader";
 
-                string logname = "MaxiGrafTEST1";
+                string logname = "MaxiGraf";
 
                 //EventLogPermission eventLogPermission = new EventLogPermission(EventLogPermissionAccess.Administer, domain);
                 //eventLogPermission.Assert();
@@ -869,32 +869,58 @@ namespace EventLog1
     }
 
 
+        public class EventLogSubscription
+        {
+            public string login;
+            public string password;
+            public string domain_name;
+            public string user_name;
+            public string log_nаme;
+
+            public const string Query_Const = "*";
+
+            public string query = "*";
+
+            public EventLogSubscription()
+            {
+            }
+
+            public EventLogSubscription
+                                        (
+                                          string Login,
+                                          string Password,
+                                          string Domain_name,
+                                          string User_name,
+                                          string Log_nаme,
+                                          string Query = Query_Const
+                                        )
+            {
+                     login = Login;
+                     password = Password;
+                     domain_name = Domain_name;
+                     user_name = User_name;
+                     log_nаme = Log_nаme;
+                     query = Query;
+            }
 
 
+            public SecureString GetPreparedPassword()
+            {
+                SecureString kod = new SecureString();
+
+                char[] sp = password.ToCharArray();
+
+                for (int i = 0; i < sp.Length; i++)
+                    kod.AppendChar(sp[i]);
+
+                return kod;
+            }
+        }
 
 
+        private void button7_Click(object sender, EventArgs e)
+        {
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-}
+        }
+    }
 }
