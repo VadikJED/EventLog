@@ -1085,14 +1085,12 @@ namespace EventLog1
             }
         }
 
+        private void button8_Click(object sender, EventArgs e)
+        {
+            Process cmd = new Process();
+            cmd.StartInfo.FileName = "netplwiz";
+            cmd.Start();
 
-
-
-
-
-
-
-
-
+        }
     }
 }
