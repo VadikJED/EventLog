@@ -871,10 +871,11 @@ namespace EventLog1
 
         public class EventLogSubscription
         {
-            public string login;
-            public string password;
+            //public string login;
+            
             public string domain_name;
             public string user_name;
+            public string password;
             public string log_nаme;
 
             public const string Query_Const = "*";
@@ -887,20 +888,23 @@ namespace EventLog1
 
             public EventLogSubscription
                                         (
-                                          string Login,
-                                          string Password,
-                                          string Domain_name,
+                                             //string Login,
+
+                                             string Domain_name,
                                           string User_name,
+                                          string Password,
+                                         
                                           string Log_nаme,
                                           string Query = Query_Const
                                         )
             {
-                     login = Login;
+                    // login = Login;
                      password = Password;
                      domain_name = Domain_name;
                      user_name = User_name;
                      log_nаme = Log_nаme;
-                     query = Query;
+                        password = Password;
+                        query = Query;
             }
 
 
@@ -918,9 +922,177 @@ namespace EventLog1
         }
 
 
+        public List<EventLogSubscription> EventLogCollection = new List<EventLogSubscription>();
+
         private void button7_Click(object sender, EventArgs e)
         {
+            WatcherS();
+        }
+
+
+
+        public void WatcherS()
+        {
+            EventLogCollection.Add(new EventLogSubscription("747-ПК", "EventReader", "1", "MaxiGraf"));
+
+            EventLogCollection.Add(new EventLogSubscription("DESKTOP-PMFSLPC", "EventReader", "1", "MaxiGrafTEST1"));
+
+
+            List<EventLogWatcher> watcherS = new List<EventLogWatcher>();
+
+
+            try
+            {
+
+
+                var beforeCulture = Thread.CurrentThread.CurrentCulture;
+
+                try
+                {
+
+
+
+                    Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");
+
+
+                    for (int i = 0; i < EventLogCollection.Count; i++)
+                    {
+
+                        EventLogSession S = new EventLogSession(
+                        EventLogCollection[i].domain_name,
+                        EventLogCollection[i].domain_name,
+                        EventLogCollection[i].user_name,
+                        EventLogCollection[i].GetPreparedPassword(),
+                        SessionAuthentication.Default);
+
+
+                        //kod.Dispose();
+
+                        EventLogConfiguration logCon = new EventLogConfiguration(EventLogCollection[i].log_nаme, S);
+
+
+
+                        List<string> d = new List<string>();
+
+                        d.AddRange(S.GetLogNames());
+
+                        var t = logCon.ProviderNames;
+
+
+
+                        EventLogQuery eventsQuery = new EventLogQuery(logCon.LogName, PathType.LogName);//, queryString);
+
+
+                        eventsQuery.Session = S;
+                        eventsQuery.TolerateQueryErrors = false;
+
+
+                        watcherS.Add(new EventLogWatcher(eventsQuery));
+
+                      //  watcher = new EventLogWatcher(eventsQuery);
+
+                     //   watcher.EventRecordWritten +=
+                     //                                 new EventHandler<EventRecordWrittenEventArgs>(
+                     //                                 HandleEvent);
+
+                        watcherS[watcherS.Count - 1].EventRecordWritten +=
+                     new EventHandler<EventRecordWrittenEventArgs>(
+                         HandleEventWatcherS);
+
+                        watcherS[watcherS.Count - 1].Enabled = true;
+
+                        Console.WriteLine("Waiting for events... " + i.ToString());
+                    }
+
+                }
+                finally
+                {
+                    Thread.CurrentThread.CurrentCulture = beforeCulture;
+                }
+
+            }
+            catch (EventLogReadingException e)
+            {
+                Console.WriteLine("Error reading the log: {0}", e.Message);
+            }
+            finally
+            {
+
+                //// Stop listening to events
+                //watcher.Enabled = false;
+
+                //if (watcher != null)
+                //    watcher.Dispose();
+
+                
+            }
+
+
+
 
         }
+
+        // <summary>
+        // Callback method that gets executed when an event is
+        // reported to the subscription.
+        // </summary>
+        public void HandleEventWatcherS(object obj, EventRecordWrittenEventArgs arg)
+        {
+
+            // Make sure there was no error reading the event.
+            if (arg.EventRecord != null)
+            {
+                Console.WriteLine("Received event {0} from the subscription.", arg.EventRecord.Id);
+                Console.WriteLine("Description: {0}", arg.EventRecord.FormatDescription());
+
+                Debug.WriteLine(arg.EventRecord.Properties[0].Value.ToString());
+                Debug.WriteLine(Encoding.UTF8.GetString((byte[])(arg.EventRecord.Properties[1].Value)));
+
+                //for(int i = 0; i < arg.EventRecord.Properties.Count; i++)
+                //{
+                //    Console.WriteLine(arg.EventRecord.Properties[i].ToString());
+                //}
+
+
+                //////
+                // This section creates a list of XPath reference strings to select
+                // the properties that we want to display
+                // In this example, we will extract the User, TimeCreated, EventID and EventRecordID
+                //////
+                // Array of strings containing XPath references
+                // String[] xPathRefs = new String[9];
+                //xPathRefs[0] = "Event/System/TimeCreated/@SystemTime";
+                //xPathRefs[1] = "Event/System/Computer";
+                //xPathRefs[2] = "Event/EventData/Data[@Name=\"TargetUserName\"]";
+                //xPathRefs[3] = "Event/EventData/Data[@Name=\"TargetDomainName\"]";
+                //// Place those strings in an IEnumberable object
+                //IEnumerable<String> xPathEnum = xPathRefs;
+                //// Create the property selection context using the XPath reference
+                //EventLogPropertySelector logPropertyContext = new EventLogPropertySelector(xPathEnum);
+
+                //IList<object> logEventProps = ((EventLogRecord)arg.EventRecord);
+                //Console.WriteLine("Time: ", logEventProps[0]);
+                //Console.WriteLine("Computer: ", logEventProps[1]);
+                //Console.WriteLine("TargetUserName: ", logEventProps[2]);
+                //Console.WriteLine("TargetDomainName: ", logEventProps[3]);
+                //Console.WriteLine("---------------------------------------");
+
+                //Console.WriteLine("Description: ", arg.EventRecord.FormatDescription());
+            }
+            else
+            {
+                Console.WriteLine("The event instance was null.");
+            }
+        }
+
+
+
+
+
+
+
+
+
+
     }
 }
