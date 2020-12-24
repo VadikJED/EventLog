@@ -17,7 +17,7 @@ using System.Globalization;
 namespace EventLog1
 {
 
-    // количество событий (записей) которое хронит windows для каждого Event Source ~= 3345
+    // количество событий (записей) которое хронит windows для каждого Event Source ~= 3345 (~512 kb)
 
     public partial class Form1 : Form
     {
