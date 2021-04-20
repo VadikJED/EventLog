@@ -294,14 +294,14 @@ namespace EventLog1
                
 
                 string domain = 
-                    "747-ПК";
+                    "USER-ПК";
               
 
                 string username =
                
                 "EventReader";
 
-                string logname = "MaxiGraf";
+                string logname = "USER";
 
 
                 EventLogSession S = new EventLogSession(
@@ -607,9 +607,9 @@ namespace EventLog1
 
         public void WatcherS()
         {
-            EventLogCollectionSubscription.Add(new EventLogSubscription("747-ПК", "EventReader", "1", "MaxiGraf"));
+            EventLogCollectionSubscription.Add(new EventLogSubscription("any domain name", "EventReader", "1", "MY"));
 
-            EventLogCollectionSubscription.Add(new EventLogSubscription("DESKTOP-PMFSLPC", "EventReader", "1", "MaxiGrafTEST1"));
+            EventLogCollectionSubscription.Add(new EventLogSubscription("any domain name", "EventReader", "1", "MY_2"));
 
 
             List<EventLogWatcher> watcherS = new List<EventLogWatcher>();
