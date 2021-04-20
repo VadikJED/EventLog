@@ -34,8 +34,8 @@ namespace EventLog1
             Create_the_source();
         }
 
-        string Sourse  =    "MaxiGraf_Log_Data";
-        string LogName =    "MaxiGraf";
+        string Sourse  =    "MY_Log_Data";
+        string LogName =    "MY";
         string Machine =    ".";
         Int64 sizeKB   =    1048576; //1GB
 
@@ -443,14 +443,14 @@ namespace EventLog1
 
                         string domain =
                       
-                        "IVS-PC";
+                        "MY-PC";
 
                         string username =
                        
                         "AD";
                        
 
-                        string logname = "MaxiGraf";
+                        string logname = "MY";
 
                        
                         EventLogSession S = new EventLogSession(
